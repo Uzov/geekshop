@@ -1,7 +1,7 @@
 <ul class="links-menu">
     {% for link in links_menu %}
     <li>
-        <a href="#">
+        <a href="{% url 'products:category' link.pk %}">
             {{ link.name }}
         </a>
     </li>
