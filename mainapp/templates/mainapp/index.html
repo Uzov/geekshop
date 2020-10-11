@@ -6,12 +6,17 @@
 <div class="slider">
     <div class="header clearfix">
         {% include 'mainapp/includes/inc_menu.html' %}
+        <a href="#" class="search"></a>
+        <a href="#" class="basket"></a>
     </div>
     <div class="text-slider">
         <h3 class="green">тенденции</h3>
         <h3 class="big"> удобные стулья</h3>
         <p>Новый уровень комфорта. Отличные характеристики.</p>
-        <a href="#" class="button-order">заказать <img src="{% static 'img/arrow.png' %}" alt=""></a>
+        <a href="#" class="button-order">
+            заказать
+            <img src="{% static 'img/arrow.png' %}" alt="">
+        </a>
     </div>
     <div class="navi">
         <a href="#"></a><a href="#"></a><a href="#"></a>
@@ -31,12 +36,11 @@
     <div class="tab-content">
         {% for product in products %}
         <div class="block">
-            <a href="{{ product.image_href }}"><img src="{% static 'img/' %}{{ product.image_src }}"
-                    alt="{{ product.alt }}">
+            <a href="{{ product.image }}"><img src="{{ media_url }}{{ product.image }}" alt="{{ product.short_desc }}">
                 <div class="text">
-                    <img src="{% static 'img/icon-hover.png' %}" alt="{{ product.alt }}">
+                    <img src="{% static 'img/icon-hover.png' %}" alt="img">
                     <h4>{{ product.name }}</h4>
-                    <p>{{ product.desc }} </p>
+                    <p>Описание: {{ product.description }} </p>
                 </div>
             </a>
         </div>
