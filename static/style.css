@@ -1124,3 +1124,90 @@ td:first-child {
     width: 300px;
     border-radius: 25px;
 }
+
+.products_list .title {
+    margin: 20px auto;
+    height: 50px;
+    float: none;
+}
+
+.products_list .title h2 {
+    margin-top: 0;
+    float: left;
+}
+
+.products_list .title .paginator{
+    display: block;
+    position: relative;
+    left: 25px;
+    top: 15px;
+    margin-left: 25px;
+    text-decoration: none;
+    color: #555;
+    float: left;
+}
+
+.products_list .title .price_bounds{
+    display: block;
+    position: relative;
+    left: 25px;
+    top: 15px;
+    margin-left: 25px;
+    text-decoration: none;
+    color: #555;
+    float: left;
+}
+
+.category-products {
+	margin-bottom: 75px;
+}
+.category-products .block a img {
+	float: left;
+}
+.category-products .block {
+	float: left;
+	margin-right: 30px;
+	display: block;
+	height: 370px;
+	width: 370px;
+	position: relative;
+}
+.category-products .block:nth-child(3n) {
+	margin-right: 0px;
+}
+.category-products a .text {
+	display: none;
+	height: 368px;
+	width: 368px;
+	background-color: #ffffff;
+    opacity: 0.9;
+    position: absolute;
+    top: 0;
+    text-align: center;
+    border: 1px solid #9c9c9c;
+}
+.category-products a .text h4 {
+	color:  #212121;
+	font-size: 30px;
+	font-weight: 700;
+	line-height: 30px;
+	text-align: center;
+}
+.category-products a .text p {
+	color:  #6c6c6c;
+	font-size: 20px;
+	font-weight: 300;
+	text-align: center;
+	margin: 15px 15px;
+}
+.category-products a .text img {
+	float: none;
+	margin-top: 80px;
+}
+.category-products a:hover .text{
+	display: block;
+}
+
+.slider-control .block a img {
+    width: 70px;
+}
