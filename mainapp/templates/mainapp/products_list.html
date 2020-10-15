@@ -14,13 +14,18 @@
         <div class="category-products clearfix">
             {% for product in products %}
             <div class="block">
-                <a href="#"><img src="{{ media_url }}{{ product.image }}" alt="{{ product.short_desc }}">
-                    <div class="text">
-                        <img src="{% static 'img/icon-hover.png' %}" alt="hover">
-                        <h4>{{ product.name }}</h4>
-                        <p>{{ product.description }} </p>
-                    </div>
-                </a>
+                {% if user.is_authenticated %}
+                <a href="{% url 'basket:add' product.pk %}">
+                    {% else %}
+                    <a href="{% url 'auth:login' %}">
+                        {% endif %}
+                        <img src="{{ media_url }}{{ product.image }}" alt="{{ product.short_desc }}">
+                        <div class="text">
+                            <img src="{% static 'img/icon-hover.png' %}" alt="hover">
+                            <h4>{{ product.name }}</h4>
+                            <p>{{ product.description }} </p>
+                        </div>
+                    </a>
             </div>
             {% endfor %}
         </div>
