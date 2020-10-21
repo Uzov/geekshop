@@ -1,4 +1,4 @@
-<a href="index.html" class="logo"></a>
+<a href="{% url 'main' %}" class="logo"></a>
 <ul class="menu">
     <li>
         <a href="{% url 'main' %}" class="{% if request.resolver_match.url_name == 'main' %}active{% endif %}">
@@ -7,7 +7,7 @@
     </li>
     <li>
         <a href="{% url 'products:index' %}"
-            class="{% if request.resolver_match.url_name == 'index' %}active{% endif %}">
+            class="{% if request.resolver_match.namespace == 'products' %}active{% endif %}">
             продукты
         </a>
     </li>
@@ -32,4 +32,8 @@
     </li>
 </ul>
 <a href="#" class="search"></a>
-<a href="#" class="basket"></a>
+<a href="{% url 'basket:view' %}" class="basket">
+    <span>
+        {% if basket %} {{ basket|length }} {% endif %}
+    </span>
+</a>
