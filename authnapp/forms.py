@@ -64,6 +64,7 @@ class ShopUserEditForm(UserChangeForm):
         model = ShopUser
         fields = ("username", "first_name", "email", "age", "avatar")
 
+
 class ShopUserProfileEditForm(forms.ModelForm):
     class Meta:
         model = ShopUserProfile
