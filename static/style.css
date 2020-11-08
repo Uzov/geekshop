@@ -728,6 +728,7 @@ body {
     display: block;
     margin-left: 30px;
     width: 150px;
+    font-size: 14px;
 }
 
 .clearfix:after {
