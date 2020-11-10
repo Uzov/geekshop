@@ -26,12 +26,7 @@
             </a>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <a class="dropdown-item" href="{% url 'auth:edit' %}">{{ "профиль"|upper }}</a>
-                {% comment %}
                 <a class="dropdown-item" href="{% url 'order:orders_list' %}">{{ "Кабинет заказов"|upper }}</a>
-                {% endcomment %}
-                <!-- For testing purposes only -->
-                <a class="dropdown-item" href="#">{{ "Кабинет заказов"|upper }}</a>
-                <!-- /.For testing purposes only -->
             </div>
         </div>
     </li>

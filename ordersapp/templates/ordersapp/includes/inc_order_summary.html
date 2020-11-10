@@ -1,0 +1,64 @@
+<p class="h2 text-center">
+    Ваш заказ, уважаемый
+    {% if user.first_name %}{{ user.first_name|title }}{% else %}{{ "пользователь"|capfirst }}{% endif %}
+</p>
+<p>
+<div class="row justify-content-between">
+    <div class="col-2">
+        <a href="{% url 'main' %}" class="btn btn-sm btn-outline-secondary col-12" role="button"><i
+                class="fa fa-arrow-circle-o-left" aria-hidden="true"></i> {{ "на главную"|capfirst }}</a>
+    </div>
+    <div class="col-2">
+        <a href="{% url 'ordersapp:orders_list' %}" class="btn btn-sm btn-outline-secondary col-12" role="button"><i
+                class="fa fa-list-ul" aria-hidden="true"></i> {{ "к списку заказов"|capfirst }}</a>
+    </div>
+</div>
+</p>
+<p>
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col" class="col-4">Характеристика</th>
+            <th scope="col" class="col-8">Значение</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% if view.object %}
+        <tr>
+            <th scope="row">Описание заказа</th>
+            <td>Заказ №{{ object.pk }} от {{ object.created|date:"Y-m-d H:i:s" }}</td>
+        </tr>
+        <tr>
+            <th scope="row">Заказчик</th>
+            <td>{% if user.first_name %}{{ user.first_name|title }}{% else %}{{ "пользователь"|capfirst }}{% endif %}
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">Время обновления заказа</th>
+            <td>{{ object.updated|date:"Y-m-d H:i:s" }}</td>
+        </tr>
+        <tr>
+            <th scope="row">Текущий статус</th>
+            <td><span class="badge badge-info">{{ object.get_status_display|capfirst }}</span></td>
+        </tr>
+        <tr>
+            <th scope="row">Общее количество товаров</th>
+            <td><span class="order_total_quantity">{{ object.get_total_quantity }}</span></td>
+        </tr>
+        <tr>
+            <th scope="row">Общая стоимость</th>
+            <td><span class="order_total_cost">{{ object.get_total_cost }}</span> руб.</td>
+        </tr>
+        {% else %}
+        <tr>
+            <th scope="row">Общее количество товаров</th>
+            <td><span class="order_total_quantity">{{ basket.0.total_quantity }}</span></td>
+        </tr>
+        <tr>
+            <th scope="row">Общая стоимость</th>
+            <td><span class="order_total_cost">{{ basket.0.total_cost }}</span> руб.</td>
+        </tr>
+        {% endif %}
+    </tbody>
+</table>
+</p>

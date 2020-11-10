@@ -1,0 +1,61 @@
+{% extends 'ordersapp/base.html' %}
+{% load staticfiles %}
+
+
+{% block content %}
+<p class="h2 text-center">
+    Ваши заказы, уважаемый
+    {% if user.first_name %}{{ user.first_name|title }}{% else %}{{ "пользователь"|capfirst }}{% endif %}
+</p>
+<p>
+<div class="row justify-content-between">
+    <div class="col-2">
+        <a href="{% url 'main' %}" class="btn btn-sm btn-outline-secondary col-12" role="button"><i
+                class="fa fa-arrow-circle-o-left" aria-hidden="true"></i> {{ "на главную"|capfirst }}</a>
+    </div>
+    <div class="col-2">
+        <a href="{% url 'ordersapp:order_create' %}" class="btn btn-sm btn-outline-success col-12" role="button"><i
+                class="fa fa-plus" aria-hidden="true"></i> {{ "новый заказ"|capfirst }}</a>
+    </div>
+</div>
+</p>
+<p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Создан</th>
+            <th>Обновлен</th>
+            <th>Статус</th>
+            <th colspan="3">Действия</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in object_list %}
+        {% if item.is_active %}
+        <tr>
+            <th scope="row">{{ item.pk }}</th>
+            <td>{{ item.created|date:"Y-m-d H:i:s" }}</td>
+            <td>{{ item.updated|date:"Y-m-d H:i:s" }}</td>
+            <td>{{ item.get_status_display }}</td>
+            <td><a href="{% url 'ordersapp:order_read' item.pk %}" data-toggle="tooltip" data-placement="top"
+                    title="Просмотр деталей"><i class="fa fa-list-alt" aria-hidden="true"></i></a></td>
+            <td>
+                {% if item.status == 'FM' %}
+                <a href="{% url 'ordersapp:order_update' item.pk %}" data-toggle="tooltip" data-placement="top"
+                    title="Редактировать"><i class=" fa fa-pencil" aria-hidden="true"></i></a>
+                {% endif %}
+            </td>
+            <td>
+                {% if item.status == 'FM' %}
+                <a href="{% url 'ordersapp:order_delete' item.pk %}" data-toggle="tooltip" data-placement="top"
+                    title="Удалить"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                {% endif %}
+            </td>
+        </tr>
+        {% endif %}
+        {% endfor %}
+    </tbody>
+</table>
+</p>
+{% endblock content %}

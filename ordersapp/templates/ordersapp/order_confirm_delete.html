@@ -1,0 +1,20 @@
+{% extends 'ordersapp/base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+{% include 'ordersapp/includes/inc_order_summary.html' %}
+{{ var }}
+<p>
+<h3>Вы уверены, что хотите удалить данный заказ?</h3>
+</p>
+<p>
+<form action="{% url 'ordersapp:order_delete' object.pk %}" method="post">
+    {% csrf_token %}
+    <div class="btn-group col-12" role="group">
+        <a href="{{ request.META.HTTP_REFERER }}" class="btn btn-outline-secondary"
+            role="button">{{ "отмена"|capfirst }}</a>
+        <button type="submit" class="btn btn-outline-danger">{{ "удалить"|capfirst }}</button>
+    </div>
+</form>
+</p>
+{% endblock %}

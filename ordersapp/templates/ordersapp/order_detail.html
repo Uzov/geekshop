@@ -1,0 +1,45 @@
+{% extends "ordersapp/base.html" %}
+{% load staticfiles %}
+
+{% block content %}
+
+{% include 'ordersapp/includes/inc_order_summary.html' %}
+<p>
+<h3>
+    Товары заказа
+</h3>
+</p>
+<p>
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col" class="col-4">Изображение</th>
+            <th scope="col" class="col-8">Описание</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in object.orderitems.select_related %}
+        <tr>
+            <td>
+                <img src="{{ MEDIA_URL }}{{ item.product.image }}" alt="{{ item.product.short_desc }}"
+                    style="min-width: 250px; max-width: 250px;">
+            </td>
+            <td>
+                <span class="category_name">{{ item.product.category.name }}</span>
+                <span class="product_name">{{ item.product.name }}</span>
+                <span class="product_price">{{ item.product.price }}&nbspруб</span>
+                <span class="product_quantitiy">x {{ item.quantity }} шт.</span>
+                <span class="product_cost"> = {{ item.get_product_cost }}&nbspруб</span>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</p>
+<p>
+<div class="btn-group col-12" role="group">
+    {% include 'ordersapp/includes/inc_order_actions.html' %}
+</div>
+</p>
+
+{% endblock %}
