@@ -5,21 +5,11 @@ from django.shortcuts import get_object_or_404
 from mainapp.models import Product
 
 
-class BasketQuerySet(models.QuerySet):
-    def delete(self, *args, **kwargs):
-        for object in self:
-            object.product.quantity += object.quantity
-            object.product.save()
-        super(BasketQuerySet, self).delete(*args, **kwargs)
-
-
 class Basket(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="basket")
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(verbose_name="количество", default=0)
     add_datetime = models.DateTimeField(verbose_name="время добавления", auto_now_add=True)
-
-    objects = BasketQuerySet.as_manager()
 
     @property
     def product_cost(self):
@@ -47,18 +37,3 @@ class Basket(models.Model):
     @staticmethod
     def get_item(pk):
         return get_object_or_404(Basket, pk=pk)
-
-    # Object's saving method
-    def save(self, *args, **kwargs):
-        if self.pk:
-            self.product.quantity -= self.quantity - self.__class__.get_item(self.pk).quantity
-        else:
-            self.product.quantity -= self.quantity
-        self.product.save()
-        super(self.__class__, self).save(*args, **kwargs)
-
-    # Object's deleting method
-    def delete(self):
-        self.product.quantity += self.quantity
-        self.product.save()
-        super(self.__class__, self).delete()
