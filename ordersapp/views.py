@@ -38,6 +38,7 @@ class OrderItemsCreate(CreateView):
                 for num, form in enumerate(formset.forms):
                     form.initial["product"] = basket_items[num].product
                     form.initial["quantity"] = basket_items[num].quantity
+                    form.initial["price"] = basket_items[num].product.price
             else:
                 formset = OrderFormSet()
 
@@ -84,7 +85,11 @@ class OrderItemsUpdate(UpdateView):
         if self.request.POST:
             data["orderitems"] = OrderFormSet(self.request.POST, instance=self.object)
         else:
-            data["orderitems"] = OrderFormSet(instance=self.object)
+            formset = OrderFormSet(instance=self.object)
+            for form in formset.forms:
+                if form.instance.pk:
+                    form.initial["price"] = form.instance.product.price
+            data["orderitems"] = formset
         return data
 
     def form_valid(self, form):
