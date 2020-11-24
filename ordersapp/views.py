@@ -1,4 +1,6 @@
 from django.db import transaction
+from django.db.models.signals import pre_delete, pre_save
+from django.dispatch import receiver
 from django.forms import inlineformset_factory
 from django.shortcuts import HttpResponseRedirect, get_object_or_404
 from django.urls import reverse, reverse_lazy
@@ -36,6 +38,7 @@ class OrderItemsCreate(CreateView):
                 for num, form in enumerate(formset.forms):
                     form.initial["product"] = basket_items[num].product
                     form.initial["quantity"] = basket_items[num].quantity
+                    form.initial["price"] = basket_items[num].product.price
             else:
                 formset = OrderFormSet()
 
@@ -82,7 +85,11 @@ class OrderItemsUpdate(UpdateView):
         if self.request.POST:
             data["orderitems"] = OrderFormSet(self.request.POST, instance=self.object)
         else:
-            data["orderitems"] = OrderFormSet(instance=self.object)
+            formset = OrderFormSet(instance=self.object)
+            for form in formset.forms:
+                if form.instance.pk:
+                    form.initial["price"] = form.instance.product.price
+            data["orderitems"] = formset
         return data
 
     def form_valid(self, form):
@@ -113,3 +120,30 @@ def order_forming_complete(request, pk):
     order.save()
 
     return HttpResponseRedirect(reverse("ordersapp:orders_list"))
+
+
+@receiver(pre_save, sender=OrderItem)
+@receiver(pre_save, sender=Basket)
+def product_quantity_update_save(instance, sender, **kwargs):
+    # if instance.pk:
+    #     instance.product.quantity -= instance.quantity - sender.get_item(instance.pk).quantity
+    # else:
+    #     instance.product.quantity -= instance.quantity
+    # instance.product.save()
+    quantity_total = instance.product.reserved + instance.product.quantity
+    quantity_delta = quantity_total - instance.quantity
+    if quantity_delta < 0:
+        instance.product.reserved = quantity_total
+        instance.quantity = instance.product.reserved
+    else:
+        instance.product.reserved = instance.quantity
+        instance.product.quantity = quantity_delta
+    instance.product.save()
+
+
+@receiver(pre_delete, sender=OrderItem)
+@receiver(pre_delete, sender=Basket)
+def product_quantity_update_delete(instance, **kwargs):
+    instance.product.quantity += instance.product.reserved
+    instance.product.reserved = 0
+    instance.product.save()
