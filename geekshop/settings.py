@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     "ordersapp",
     "debug_toolbar",
     "template_profiler_panel",
+    "django_extensions",
 ]
 
 # Django Crispy Forms
