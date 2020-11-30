@@ -14,7 +14,9 @@ from ordersapp.models import Order, OrderItem
 from mainapp.models import Product
 from django.http import JsonResponse
 
-class OrderList(ListView):
+from django.contrib.auth.mixins import LoginRequiredMixin
+
+class OrderList(LoginRequiredMixin, ListView):
     model = Order
 
     def get_queryset(self):
@@ -75,7 +77,6 @@ class OrderRead(DetailView):
         context["title"] = "заказ/просмотр"
         return context
 
-
 class OrderItemsUpdate(UpdateView):
     model = Order
     fields = []
@@ -84,10 +85,12 @@ class OrderItemsUpdate(UpdateView):
     def get_context_data(self, **kwargs):
         data = super(OrderItemsUpdate, self).get_context_data(**kwargs)
         OrderFormSet = inlineformset_factory(Order, OrderItem, form=OrderItemForm, extra=1)
+
         if self.request.POST:
             data["orderitems"] = OrderFormSet(self.request.POST, instance=self.object)
         else:
-            formset = OrderFormSet(instance=self.object)
+            queryset = self.object.orderitems.select_related()
+            formset = OrderFormSet(instance=self.object, queryset=queryset)
             for form in formset.forms:
                 if form.instance.pk:
                     form.initial["price"] = form.instance.product.price
@@ -109,7 +112,6 @@ class OrderItemsUpdate(UpdateView):
             self.object.delete()
 
         return super(OrderItemsUpdate, self).form_valid(form)
-
 
 class OrderDelete(DeleteView):
     model = Order
